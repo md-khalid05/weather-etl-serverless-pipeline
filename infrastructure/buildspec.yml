@@ -1,0 +1,28 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.13
+
+    commands:
+      - echo "Installing dependencies..."
+      - pip install -r requirements.txt
+
+  pre_build:
+    commands:
+      - echo "Validating Lambda source..."
+      - python -m py_compile src/lambda_function.py
+
+  build:
+    commands:
+      - echo "Packaging Lambda function..."
+      - mkdir -p build
+      - cp src/lambda_function.py build/
+      - cd build
+      - zip -r lambda.zip .
+      - cd ..
+
+artifacts:
+  files:
+    - build/lambda.zip
