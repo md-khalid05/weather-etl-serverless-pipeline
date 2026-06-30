@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Virtual environments
+venv/
+.env
+
+# macOS
+.DS_Store
+
+# IDEs
+.vscode/
+.idea/
+
+# AWS
+.aws/
+
+# Logs
+*.log
+
+# Test cache
+.pytest_cache/
