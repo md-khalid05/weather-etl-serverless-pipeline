@@ -278,13 +278,13 @@ AWS CodePipeline:
 
 The complete source code is maintained in GitHub with a structured project layout.
 
-![GitHub Repository](screenshots/github/github_folder.png)
+![GitHub Repository](screenshots/Github/github_folder.png)
 
 ### Amazon S3 Bucket
 
 Raw weather datasets are uploaded to the **raw/** directory inside Amazon S3.
 
-![Amazon S3](screenshots/s3/s3_2.png)
+![Amazon S3](screenshots/S3/S3_2.png)
 
 ### AWS Lambda
 
@@ -292,40 +292,40 @@ The Lambda function performs the complete ETL process.
 
 It is triggered automatically whenever a new dataset is uploaded.
 
-![Lambda](screenshots/lambda/lambda_2.png)
+![Lambda](screenshots/Lambda/lambda_2.png)
 
 ### Amazon CloudWatch
 
 CloudWatch captures Lambda execution logs, errors, and processing statistics.
 
-![CloudWatch](screenshots/cloudwatch/cloudwatch_1.png)
+![CloudWatch](screenshots/CloudWatch/cloudwatch_1.png)
 
 ### Amazon DynamoDB
 
 Clean weather records are stored in DynamoDB after successful validation.
 
-![DynamoDB](screenshots/dynamodb/Dynamodb.png)
+![DynamoDB](screenshots/Dynamodb/Dynamodb.png)
 
 ### GitHub Actions
 
 Every push automatically validates the Lambda source code.
 
-![GitHub Actions](screenshots/github/github2.png)
+![GitHub Actions](screenshots/Github/github2.png)
 
 ### AWS CodeBuild
 
 Builds are executed whenever CodePipeline is triggered.
 
-![CodeBuild](screenshots/codebuild/codebuild_1.png)
+![CodeBuild](screenshots/codeBuild/codebuild_1.png)
 
 ### AWS CodePipeline
 
 AWS CodePipeline automates continuous deployment from GitHub.
 
-![CodePipeline](screenshots/codepipeline/codepipeline_1.png)
+![CodePipeline](screenshots/CodePipeline/codepipeline1.png)
 
 ### IAM Roles
 
 Least-privilege IAM permissions are assigned to Lambda for secure access to AWS services.
 
-![IAM](screenshots/iam/IAM_2.png)
+![IAM](screenshots/IAM/IAM_2.png)
