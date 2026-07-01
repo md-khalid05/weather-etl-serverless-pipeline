@@ -115,3 +115,217 @@ Automatic Deployment
 | GitHub Actions    | Continuous Integration         |
 | AWS CodeBuild     | Build validation               |
 | AWS CodePipeline  | Continuous Deployment          |
+
+## 📂 Repository Structure
+
+```text
+weather-etl-serverless-pipeline/
+│
+├── .github/
+│   └── workflows/
+│       └── ci.yml                 # GitHub Actions workflow
+│
+├── infrastructure/
+│   ├── buildspec.yml              # AWS CodeBuild configuration
+│   └── iam_policy.json            # IAM permissions (optional)
+│
+├── sample_data/
+│   └── weather.csv                # Sample weather dataset
+│
+├── screenshots/
+│   ├── github/
+│   ├── s3/
+│   ├── lambda/
+│   ├── dynamodb/
+│   ├── cloudwatch/
+│   ├── codebuild/
+│   ├── codepipeline/
+│   └── iam/
+│
+├── src/
+│   └── lambda_function.py         # Main ETL logic
+│
+├── README.md
+├── requirements.txt
+└── .gitignore
+```
+
+## 📊 Dataset Information
+
+The pipeline processes a sample weather dataset stored as a CSV file in Amazon S3.
+
+### Dataset Fields
+
+| Field     | Description              |
+| --------- | ------------------------ |
+| record_id | Unique weather record ID |
+| city      | City name                |
+| condition | Weather condition        |
+| humidity  | Relative humidity (%)    |
+| latitude  | Geographic latitude      |
+| longitude | Geographic longitude     |
+
+The dataset simulates weather observations collected from multiple cities and is used to demonstrate a complete serverless ETL workflow.
+
+## ⭐ Project Features
+
+- Serverless ETL Architecture
+- Event-driven processing using Amazon S3 triggers
+- Automatic CSV validation
+- Data cleaning and standardization
+- Unique record generation
+- DynamoDB NoSQL storage
+- CloudWatch execution logging
+- GitHub-based version control
+- Automated CI using GitHub Actions
+- Automated deployment using AWS CodePipeline
+- Least-Privilege IAM implementation
+
+## 🔄 ETL Pipeline
+
+### 1️⃣ Extract
+
+The Lambda function is automatically invoked whenever a CSV file is uploaded to the **raw/** folder in Amazon S3.
+
+During extraction:
+
+- Reads the uploaded CSV
+- Parses weather records
+- Validates file accessibility
+- Loads records into memory
+
+---
+
+### 2️⃣ Transform
+
+Each record undergoes several transformation steps:
+
+- Remove incomplete records
+- Standardize city names
+- Convert humidity values to integers
+- Generate a unique `record_id`
+- Add a `processed_timestamp`
+- Validate latitude and longitude values
+
+---
+
+### 3️⃣ Load
+
+Validated records are inserted into Amazon DynamoDB.
+
+Partition Key
+
+Each item is stored as an independent weather observation.
+
+---
+
+### 4️⃣ Audit
+
+Execution statistics are recorded in Amazon CloudWatch including:
+
+- Records processed
+- Successful inserts
+- Failed records
+- Processing duration
+- Lambda execution status
+
+## 🚀 CI/CD Workflow
+
+```text
+Developer
+    │
+    ▼
+Push Code to GitHub
+    │
+    ▼
+GitHub Actions
+    │
+    ├── Install Dependencies
+    ├── Validate Python Syntax
+    └── Run Build Checks
+    │
+    ▼
+AWS CodePipeline
+    │
+    ▼
+AWS CodeBuild
+    │
+    ▼
+Deployment Ready
+```
+
+### Continuous Integration
+
+GitHub Actions automatically:
+
+- Checks out repository
+- Installs dependencies
+- Compiles Lambda function
+- Detects syntax errors
+
+### Continuous Deployment
+
+AWS CodePipeline:
+
+- Detects GitHub commits
+- Starts CodeBuild
+- Validates build
+- Produces deployment artifacts
+
+# 📸 Project Demonstration
+
+### GitHub Repository
+
+The complete source code is maintained in GitHub with a structured project layout.
+
+![GitHub Repository](screenshots/github/repository.png)
+
+### Amazon S3 Bucket
+
+Raw weather datasets are uploaded to the **raw/** directory inside Amazon S3.
+
+![Amazon S3](screenshots/s3/s3_bucket.png)
+
+### AWS Lambda
+
+The Lambda function performs the complete ETL process.
+
+It is triggered automatically whenever a new dataset is uploaded.
+
+![Lambda](screenshots/lambda/lambda.png)
+
+### Amazon CloudWatch
+
+CloudWatch captures Lambda execution logs, errors, and processing statistics.
+
+![CloudWatch](screenshots/cloudwatch/logs.png)
+
+### Amazon DynamoDB
+
+Clean weather records are stored in DynamoDB after successful validation.
+
+![DynamoDB](screenshots/dynamodb/table.png)
+
+### GitHub Actions
+
+Every push automatically validates the Lambda source code.
+
+![GitHub Actions](screenshots/github/actions.png)
+
+### AWS CodeBuild
+
+Builds are executed whenever CodePipeline is triggered.
+
+![CodeBuild](screenshots/codebuild/build.png)
+
+### AWS CodePipeline
+
+AWS CodePipeline automates continuous deployment from GitHub.
+
+![CodePipeline](screenshots/codepipeline/pipeline.png)
+
+### IAM Roles
+
+Least-privilege IAM permissions are assigned to Lambda for secure access to AWS services.
+
+![IAM](screenshots/iam/role.png)
