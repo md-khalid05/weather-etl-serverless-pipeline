@@ -1,318 +1,117 @@
-# Weather ETL Serverless Pipeline on AWS
+# 🌦️ Weather ETL Serverless Pipeline on AWS
 
-A production-style **Serverless ETL (Extract, Transform, Load)** pipeline built using AWS cloud services and modern DevOps practices.
-
-The project demonstrates how weather CSV data stored in Amazon S3 is automatically processed by AWS Lambda, validated and transformed, loaded into Amazon DynamoDB, monitored using Amazon CloudWatch, and continuously integrated using GitHub Actions, AWS CodeBuild, and AWS CodePipeline.
+A production-inspired **serverless ETL pipeline** that extracts weather data from a CSV dataset stored in Amazon S3, transforms and validates the records using AWS Lambda, loads the cleaned data into Amazon DynamoDB, and automates validation and deployment through GitHub Actions and AWS CodePipeline.
 
 ---
 
-# Project Overview
+![Python](https://img.shields.io/badge/Python-3.11-blue)
+![AWS Lambda](https://img.shields.io/badge/AWS-Lambda-orange)
+![Amazon S3](https://img.shields.io/badge/Amazon-S3-red)
+![DynamoDB](https://img.shields.io/badge/AWS-DynamoDB-blue)
+![GitHub Actions](https://img.shields.io/badge/GitHub-Actions-success)
+![AWS CodePipeline](https://img.shields.io/badge/AWS-CodePipeline-yellow)
 
-This project automates the complete ETL workflow:
+## 📖 Project Overview
 
-- Upload raw weather CSV files to Amazon S3
-- Automatically trigger AWS Lambda
-- Validate incoming records
-- Clean and transform data
-- Store processed records in Amazon DynamoDB
-- Record execution logs in Amazon CloudWatch
-- Automatically build the project using GitHub Actions
-- Deploy build validation using AWS CodePipeline
+This project demonstrates the implementation of a serverless ETL (Extract, Transform, Load) pipeline on AWS using modern cloud-native services.
 
-The project follows production-style folder organization and CI/CD best practices.
+The pipeline automatically processes weather datasets uploaded to Amazon S3. Whenever a CSV file is uploaded, an AWS Lambda function is triggered to validate, clean, and transform the dataset before loading the processed records into Amazon DynamoDB. Throughout execution, Amazon CloudWatch captures logs for monitoring and troubleshooting.
 
----
+To improve software quality and deployment reliability, the entire project is integrated with GitHub Actions for continuous integration (CI) and AWS CodePipeline with AWS CodeBuild for continuous deployment (CD).
 
-# Architecture
+The objective is to simulate a real-world data engineering workflow using fully managed AWS services while following serverless architecture principles.
 
-```
-                    Weather CSV
-                         │
-                         ▼
-                  Amazon S3 Bucket
-                         │
-                  ObjectCreated Event
-                         │
-                         ▼
-                 AWS Lambda Function
-                         │
-        ┌────────────────┴────────────────┐
-        ▼                                 ▼
- Amazon DynamoDB                  CloudWatch Logs
+## 🎯 Business Scenario
 
-             GitHub Repository
-                     │
-              GitHub Actions
-                     │
-             AWS CodePipeline
-                     │
-              AWS CodeBuild
-```
+Imagine a weather monitoring organization that receives daily weather observations collected from multiple cities.
 
----
+Instead of manually cleaning and storing the data, the organization requires an automated cloud-based ETL pipeline capable of:
 
-# Technology Stack
+- Receiving raw weather datasets
+- Validating incoming records
+- Cleaning inconsistent or invalid data
+- Standardizing weather attributes
+- Loading processed records into a NoSQL database
+- Maintaining execution logs for auditing
+- Automatically validating and deploying application updates
 
-| Category       | Service           |
-| -------------- | ----------------- |
-| Storage        | Amazon S3         |
-| Compute        | AWS Lambda        |
-| Database       | Amazon DynamoDB   |
-| Monitoring     | Amazon CloudWatch |
-| Source Control | GitHub            |
-| CI             | GitHub Actions    |
-| CD             | AWS CodePipeline  |
-| Build          | AWS CodeBuild     |
-| Language       | Python 3          |
-| SDK            | boto3             |
+This project implements that workflow using AWS serverless services.
 
----
+## 🏗️ Architecture Overview
 
-# AWS Resources
+```text
+                Weather Dataset (CSV)
+                        │
+                        ▼
+            Amazon S3 (raw folder)
+                        │
+             S3 Object Created Event
+                        │
+                        ▼
+              AWS Lambda ETL Function
+        ┌───────────────────────────────┐
+        │ Read CSV                      │
+        │ Validate Records              │
+        │ Remove Invalid Entries        │
+        │ Standardize Data              │
+        │ Generate record_id            │
+        │ Add processed_timestamp       │
+        └───────────────────────────────┘
+                        │
+                        ▼
+       Amazon DynamoDB (clean_weather_records)
+                        │
+                        ▼
+         Amazon CloudWatch Logs & Monitoring
 
-| Resource        | Name                    |
-| --------------- | ----------------------- |
-| S3 Bucket       | weather-etl-khalid-2026 |
-| Lambda Function | weather-etl-processor   |
-| DynamoDB Table  | clean_weather_records   |
-| Build Project   | weather-etl-build       |
-| Pipeline        | weather-etl-pipeline    |
 
----
+──────────────────────────────────────────────
 
-# Features
-
-- Fully serverless architecture
-- Automatic S3 event trigger
-- CSV validation
-- Data cleaning
-- Data transformation
-- DynamoDB storage
-- CloudWatch logging
-- Git version control
-- GitHub Actions CI
-- AWS CodePipeline
-- AWS CodeBuild integration
-- Production-style project structure
-
----
-
-# Project Structure
-
-```
-weather-etl-serverless-pipeline/
-
-│
-├── src/
-│     └── lambda_function.py
-│
-├── infrastructure/
-│     └── buildspec.yml
-│
-├── sample_data/
-│     └── weather.csv
-│
-├── screenshots/
-│
-├── .github/
-│     └── workflows/
-│             ci.yml
-│
-├── requirements.txt
-├── README.md
-└── .gitignore
+GitHub Repository
+        │
+GitHub Actions (CI)
+        │
+AWS CodeBuild
+        │
+AWS CodePipeline (CD)
+        │
+Automatic Deployment
 ```
 
----
+## 🔄 ETL Workflow
 
-# ETL Workflow
+| Stage         | Description                                                                                    |
+| ------------- | ---------------------------------------------------------------------------------------------- |
+| **Extract**   | Read raw weather CSV from Amazon S3                                                            |
+| **Transform** | Validate records, remove invalid rows, standardize fields, generate unique IDs, add timestamps |
+| **Load**      | Store cleaned records into Amazon DynamoDB                                                     |
+| **Audit**     | Log processing statistics in Amazon CloudWatch                                                 |
 
-### Extract
+## 💻 Technology Stack
 
-- Weather CSV is uploaded into Amazon S3.
+| Category             | Technology                |
+| -------------------- | ------------------------- |
+| Programming Language | Python 3.11               |
+| Cloud Platform       | Amazon Web Services (AWS) |
+| Storage              | Amazon S3                 |
+| Compute              | AWS Lambda                |
+| Database             | Amazon DynamoDB           |
+| Monitoring           | Amazon CloudWatch         |
+| Version Control      | Git & GitHub              |
+| CI                   | GitHub Actions            |
+| CD                   | AWS CodePipeline          |
+| Build Service        | AWS CodeBuild             |
 
-### Transform
+## ☁️ AWS Services Used
 
-The Lambda function:
-
-- validates required fields
-- removes invalid records
-- converts records into structured format
-- prepares data for DynamoDB
-
-### Load
-
-- Clean records are inserted into Amazon DynamoDB.
-
-### Monitor
-
-- Processing statistics and errors are logged into Amazon CloudWatch.
-
----
-
-# Sample Dataset
-
-Each weather record contains:
-
-- Record ID
-- City
-- Temperature
-- Humidity
-- Wind Speed
-- Weather Condition
-- Latitude
-- Longitude
-- Timestamp
-
----
-
-# CI/CD Workflow
-
-```
-Developer
-     │
- git push
-     │
-     ▼
- GitHub Repository
-     │
-     ▼
- GitHub Actions
-     │
-     ▼
- AWS CodePipeline
-     │
-     ▼
- AWS CodeBuild
-     │
-     ▼
- Build Successful
-```
-
----
-
-# Project Results
-
-Successfully demonstrated:
-
-- Automatic Lambda trigger from Amazon S3
-- Validation of weather CSV records
-- Transformation of raw records
-- Storage of clean records in DynamoDB
-- CloudWatch execution logging
-- GitHub Actions CI workflow
-- AWS CodeBuild execution
-- AWS CodePipeline execution
-
-Final Output
-
-- Total records processed: **100**
-- Records inserted: **100**
-- Invalid records: **0**
-
----
-
-# Screenshots
-
-The screenshots directory contains:
-
-- GitHub Repository
-- Amazon S3 Bucket
-- AWS Lambda
-- CloudWatch Logs
-- DynamoDB Records
-- GitHub Actions
-- AWS CodePipeline
-
----
-
-# Reflection Questions
-
-## 1. Why did you choose Amazon S3 for this project?
-
-Amazon S3 is highly scalable, durable, and integrates directly with AWS Lambda through event notifications. It is widely used as the storage layer for serverless ETL pipelines.
-
----
-
-## 2. What is your partition key and why?
-
-The DynamoDB table uses **record_id** as the partition key.
-
-Since every weather record has a unique identifier, this ensures efficient lookups while preventing duplicate entries.
-
----
-
-## 3. What transformation does the Lambda function perform?
-
-The Lambda function:
-
-- validates CSV records
-- removes invalid data
-- converts records into structured JSON
-- prepares data for DynamoDB
-- logs processing statistics to CloudWatch
-
----
-
-## 4. What did GitHub Actions automate?
-
-GitHub Actions automatically:
-
-- checks out the repository
-- installs dependencies
-- runs validation/build steps
-- verifies the project after every push
-
----
-
-## 5. What did AWS CodePipeline do?
-
-AWS CodePipeline automatically:
-
-- detects GitHub commits
-- retrieves the latest source code
-- triggers AWS CodeBuild
-- validates the project build
-- reports build success or failure
-
----
-
-## 6. What files should never be committed to GitHub?
-
-Sensitive files should never be committed, including:
-
-- AWS Access Keys
-- Secret Keys
-- `.env`
-- API Tokens
-- Passwords
-- Private Certificates
-- Generated cache files
-- Virtual environments
-
----
-
-# Future Improvements
-
-- Infrastructure as Code using Terraform
-- AWS SAM deployment
-- AWS CloudFormation templates
-- Amazon SNS email notifications
-- Data quality reporting
-- CloudWatch dashboards
-- Unit testing with pytest
-- Docker-based local testing
-
----
-
-# Author
-
-**Md Khalid Ansari**
-
-B.Tech Computer Science Engineering
-
-Aspiring Data Engineer
-
-GitHub: [https://github.com/md-khalid05](https://github.com/md-khalid05)
-
----
+| Service           | Purpose                        |
+| ----------------- | ------------------------------ |
+| Amazon S3         | Stores raw weather datasets    |
+| AWS Lambda        | Executes ETL logic             |
+| Amazon DynamoDB   | Stores cleaned weather records |
+| Amazon CloudWatch | Execution logs and monitoring  |
+| AWS IAM           | Secure permission management   |
+| GitHub            | Source code management         |
+| GitHub Actions    | Continuous Integration         |
+| AWS CodeBuild     | Build validation               |
+| AWS CodePipeline  | Continuous Deployment          |
