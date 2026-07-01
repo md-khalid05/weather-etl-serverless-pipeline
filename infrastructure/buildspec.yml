@@ -5,24 +5,81 @@ phases:
     runtime-versions:
       python: 3.13
 
-    commands:
-      - echo "Installing dependencies..."
-      - pip install -r requirements.txt
-
   pre_build:
     commands:
-      - echo "Validating Lambda source..."
-      - python -m py_compile src/lambda_function.py
+      - echo "Starting validation..."
+      - python -m py_compile lambda-validator/lambda_function.py
+      - python -m py_compile lambda-etl/lambda_function.py
+      - python -m py_compile lambda-audit/lambda_function.py
 
   build:
     commands:
-      - echo "Packaging Lambda function..."
-      - mkdir -p build
-      - cp src/lambda_function.py build/
-      - cd build
-      - zip -r lambda.zip .
+      ################################################
+      # Validator
+      ################################################
+      - echo "Packaging Validator..."
+      - rm -rf validator-build
+      - mkdir validator-build
+      - cp lambda-validator/lambda_function.py validator-build/
+      - cp -r utils validator-build/
+      - cd validator-build
+      - zip -r ../validator.zip .
       - cd ..
+
+      ################################################
+      # ETL
+      ################################################
+      - echo "Packaging ETL..."
+      - rm -rf etl-build
+      - mkdir etl-build
+      - cp lambda-etl/lambda_function.py etl-build/
+      - cp -r utils etl-build/
+      - cd etl-build
+      - zip -r ../etl.zip .
+      - cd ..
+
+      ################################################
+      # Audit
+      ################################################
+      - echo "Packaging Audit..."
+      - rm -rf audit-build
+      - mkdir audit-build
+      - cp lambda-audit/lambda_function.py audit-build/
+      - cp -r utils audit-build/
+      - cd audit-build
+      - zip -r ../audit.zip .
+      - cd ..
+
+  post_build:
+    commands:
+      ################################################
+      # Deploy Validator
+      ################################################
+      - echo "Deploying lambda-validator..."
+      - aws lambda update-function-code \
+        --function-name lambda-validator \
+        --zip-file fileb://validator.zip
+
+      ################################################
+      # Deploy ETL
+      ################################################
+      - echo "Deploying lambda-etl..."
+      - aws lambda update-function-code \
+        --function-name lambda-etl \
+        --zip-file fileb://etl.zip
+
+      ################################################
+      # Deploy Audit
+      ################################################
+      - echo "Deploying lambda-audit..."
+      - aws lambda update-function-code \
+        --function-name lambda-audit \
+        --zip-file fileb://audit.zip
+
+      - echo "Deployment completed successfully."
 
 artifacts:
   files:
-    - build/lambda.zip
+    - validator.zip
+    - etl.zip
+    - audit.zip
