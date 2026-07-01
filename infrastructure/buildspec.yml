@@ -7,7 +7,10 @@ phases:
 
   pre_build:
     commands:
-      - echo "Starting validation..."
+      - echo "==============================="
+      - echo "Starting Lambda validation..."
+      - echo "==============================="
+
       - python -m py_compile lambda-validator/lambda_function.py
       - python -m py_compile lambda-etl/lambda_function.py
       - python -m py_compile lambda-audit/lambda_function.py
@@ -15,11 +18,11 @@ phases:
   build:
     commands:
       ################################################
-      # Validator
+      # Package Validator
       ################################################
-      - echo "Packaging Validator..."
+      - echo "Packaging lambda-validator..."
       - rm -rf validator-build
-      - mkdir validator-build
+      - mkdir -p validator-build
       - cp lambda-validator/lambda_function.py validator-build/
       - cp -r utils validator-build/
       - cd validator-build
@@ -27,11 +30,11 @@ phases:
       - cd ..
 
       ################################################
-      # ETL
+      # Package ETL
       ################################################
-      - echo "Packaging ETL..."
+      - echo "Packaging lambda-etl..."
       - rm -rf etl-build
-      - mkdir etl-build
+      - mkdir -p etl-build
       - cp lambda-etl/lambda_function.py etl-build/
       - cp -r utils etl-build/
       - cd etl-build
@@ -39,11 +42,11 @@ phases:
       - cd ..
 
       ################################################
-      # Audit
+      # Package Audit
       ################################################
-      - echo "Packaging Audit..."
+      - echo "Packaging lambda-audit..."
       - rm -rf audit-build
-      - mkdir audit-build
+      - mkdir -p audit-build
       - cp lambda-audit/lambda_function.py audit-build/
       - cp -r utils audit-build/
       - cd audit-build
@@ -52,31 +55,32 @@ phases:
 
   post_build:
     commands:
+      - echo "==============================="
+      - echo "Checking AWS CLI..."
+      - echo "==============================="
+      - aws --version
+
       ################################################
       # Deploy Validator
       ################################################
       - echo "Deploying lambda-validator..."
-      - aws lambda update-function-code \
-        --function-name lambda-validator \
-        --zip-file fileb://validator.zip
+      - aws lambda update-function-code --function-name lambda-validator --zip-file fileb://validator.zip
 
       ################################################
       # Deploy ETL
       ################################################
       - echo "Deploying lambda-etl..."
-      - aws lambda update-function-code \
-        --function-name lambda-etl \
-        --zip-file fileb://etl.zip
+      - aws lambda update-function-code --function-name lambda-etl --zip-file fileb://etl.zip
 
       ################################################
       # Deploy Audit
       ################################################
       - echo "Deploying lambda-audit..."
-      - aws lambda update-function-code \
-        --function-name lambda-audit \
-        --zip-file fileb://audit.zip
+      - aws lambda update-function-code --function-name lambda-audit --zip-file fileb://audit.zip
 
-      - echo "Deployment completed successfully."
+      - echo "==============================="
+      - echo "Deployment completed successfully!"
+      - echo "==============================="
 
 artifacts:
   files:
