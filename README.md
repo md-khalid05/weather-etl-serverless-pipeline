@@ -329,3 +329,113 @@ AWS CodePipeline automates continuous deployment from GitHub.
 Least-privilege IAM permissions are assigned to Lambda for secure access to AWS services.
 
 ![IAM](screenshots/IAM/IAM_2.png)
+
+## 📝 Reflection Questions
+
+### 1. Why did you choose Amazon DynamoDB?
+
+Amazon DynamoDB is a fully managed NoSQL database that integrates seamlessly with AWS Lambda. It provides low-latency performance, automatic scaling, and eliminates the need for server management, making it ideal for serverless ETL workloads.
+
+---
+
+### 2. What is your partition key and why?
+
+The partition key used is:
+
+```text
+record_id
+```
+
+Each weather record receives a unique identifier, ensuring efficient lookups and preventing duplicate entries.
+
+---
+
+### 3. What transformations does the Lambda function perform?
+
+The Lambda function performs the following transformations:
+
+- Removes invalid or incomplete records
+- Standardizes weather attributes
+- Generates unique record IDs
+- Adds processing timestamps
+- Formats records before inserting into DynamoDB
+
+---
+
+### 4. What did GitHub Actions validate?
+
+GitHub Actions automatically:
+
+- Checks out the repository
+- Installs project dependencies
+- Compiles the Lambda source code
+- Detects syntax errors before deployment
+
+---
+
+### 5. What did AWS CodePipeline do?
+
+AWS CodePipeline automates deployment by:
+
+- Monitoring the GitHub repository
+- Triggering AWS CodeBuild
+- Validating the project
+- Preparing deployment artifacts
+
+---
+
+### 6. Which files should never be committed?
+
+The following should never be pushed to GitHub:
+
+- AWS Access Keys
+- Secret Keys
+- `.env`
+- Credentials
+- ZIP deployment packages
+- Temporary files
+- Cache folders
+
+## 🚧 Challenges Faced
+
+During development, several practical challenges were encountered:
+
+- Configuring IAM permissions for Lambda to access Amazon S3 and DynamoDB.
+- Debugging `AccessDeniedException` errors during DynamoDB batch writes.
+- Organizing the GitHub repository according to project guidelines.
+- Setting up GitHub Actions for automated syntax validation.
+- Integrating GitHub with AWS CodePipeline and AWS CodeBuild.
+- Managing screenshot organization and documentation for the project README.
+
+Each issue provided valuable experience in debugging AWS services and understanding serverless architectures.
+
+## 🚀 Future Improvements
+
+Potential enhancements for this project include:
+
+- Multi-stage ETL using multiple Lambda functions
+- EventBridge scheduled data ingestion
+- Amazon SNS notifications for severe weather alerts
+- AWS Step Functions for workflow orchestration
+- AWS Glue Data Catalog integration
+- Amazon Athena for analytical queries
+- Terraform for Infrastructure as Code (IaC)
+- Docker-based local development
+- Automated unit and integration testing
+- API Gateway for exposing processed weather data
+
+---
+
+## 👨‍💻 Author
+
+**Md Khalid Ansari**
+
+Final-year B.Tech Computer Science student passionate about **Data Engineering, Cloud Computing, and Backend Development**. This project demonstrates a serverless ETL pipeline built using AWS services and modern DevOps practices.
+
+### 📫 Connect with Me
+
+- **GitHub:** https://github.com/md-khalid05
+- **LinkedIn:** https://www.linkedin.com/in/md-khalid-ansari-80a76b229/
+- **Email:** mdkkhalidansari04@gmail.com
+
+If you found this project useful, feel free to ⭐ the repository or connect with me on LinkedIn.
